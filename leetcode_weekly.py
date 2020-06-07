@@ -29,12 +29,12 @@ def get_contest(weekly_num,page_num, weekly_type):
     return resp.text
 
 #返回用户集是否获取完成，完成的话就不需再往后找了
-def search_id_from_resp(resp_json, usr_id_set, usr2info):
+def search_id_from_resp(resp_json, usr_id_set, user_num, usr2info):
     total_rank = resp_json["total_rank"]
     for rank in total_rank:
         if rank["username"] in usr_id_set:
             #暂时加了一个分数和名次，还需要什么直接往里加
-            usr2info[rank["username"]] = [rank["rank"]+1,rank["score"]]
+            usr2info[rank["username"]] = [rank["rank"]+1,user_num,rank["score"]]
             if len(usr2info) == len(usr_id_set):
                 return True
     return False
@@ -47,25 +47,27 @@ def get_weekly_info(weekly_num_list, weekly_type):
         resp_json = ujson.loads(resp)
         #print(resp_json['user_num'])
         #从首页获取用户总数，计算出页数（每页25人）
-        page_num = int(resp_json['user_num'] / 25)
-        if resp_json['user_num'] % 25 != 0:
+        user_num = resp_json['user_num']
+        page_num = int(user_num / 25)
+        if user_num % 25 != 0:
             page_num += 1
         #print("page_num:", page_num)
         weekly2usr2info.setdefault(weekly_num, dict())
         usr2info = weekly2usr2info[weekly_num]
-        if search_id_from_resp(resp_json, usr_id_set, usr2info) == False:
+        if search_id_from_resp(resp_json, usr_id_set, user_num, usr2info) == False:
             for n in range(2, page_num + 1):
                 resp = get_contest(weekly_num, n, weekly_type)
                 resp_json = ujson.loads(resp)
-                if search_id_from_resp(resp_json, usr_id_set, usr2info) == True:
+                if search_id_from_resp(resp_json, usr_id_set, user_num, usr2info) == True:
                     break
     #记录数据，可指定分隔符
     for weekly,usr2info in weekly2usr2info.items():
         for usr,info in usr2info.items():
-            print("\t".join([str(weekly_type), str(weekly), usr] + [str(i) for i in info]))
+            print(",".join([str(weekly_type), str(weekly), usr] + [str(i) for i in info]))
 
 if __name__=="__main__":
     begin_time = time.time()
+    print(",".join(["Type", "Contest", "User"] + ["Rank", "Total", "Score"]))
     get_weekly_info(weekly_list, 1)
     get_weekly_info(biweekly_list, 2)
     end_time = time.time()

@@ -22,6 +22,13 @@ class WeeklyContest:
     def get_contest_info(self):
         for contest_num in self.contest_num_list:
             resp = self.get_contest_resp(contest_num, 1)
+            if len(resp) == 2:
+                #contest_type = "weekly-contest-"
+                #if self.contest_type == 2:
+                #    contest_type = "biweekly-contest-"
+                #contest_type += str(contest_num)
+                #print(contest_type, "has no data!")
+                continue
             resp_json = ujson.loads(resp)
             #从首页获取用户总数，计算出页数（每页25人）
             user_num = resp_json['user_num']

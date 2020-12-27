@@ -34,7 +34,7 @@ class ContentLoader(object):
                 if index == -1:
                     print("ERROR index : -1")
                     continue
-                
+
                 # Format : 218-220,221
                 segment = line.split(',')
                 for s in segment:

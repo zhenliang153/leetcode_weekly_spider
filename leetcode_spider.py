@@ -15,7 +15,6 @@ import webpage_parser
 主程序
 '''
 class LeetCodeSpider(object):
-    
     def __init__(self, path):
 
         config = configparser.ConfigParser()
@@ -23,7 +22,9 @@ class LeetCodeSpider(object):
 
         self.__users = config.get('spider', 'users')
         self.__contents = config.get('spider', 'contents')
+        # TODO 将结果输出到result文件中
         self.__results = config.get('spider', 'contents')
+        # TODO 开启多线程抓取信息
         self.__time_out = int(config.get('spider', 'time_out'))
         self.__thread_count = int(config.get('spider', 'thread_count'))
 
@@ -31,7 +32,7 @@ class LeetCodeSpider(object):
         loader = user_loader.UserLoader()
         users = loader.getUser(self.__users)
         return users
-        
+
     def __get_contents(self):
         loader = content_loader.ContentLoader()
         contents = loader.getContent(self.__contents)
@@ -48,7 +49,6 @@ class LeetCodeSpider(object):
         parser = webpage_parser.WebpageParser(users, "user_slug")
         contents_info = [dict(), dict()]
 
-        # TODO 开启多线程抓取信息
         for n in contents[0]:
             contents_info[0][n] = {}
             parser.get_content_info(1, n, contents_info[0][n])
@@ -56,7 +56,6 @@ class LeetCodeSpider(object):
             contents_info[1][n] = {}
             parser.get_content_info(2, n, contents_info[1][n])
 
-        # TODO 将结果输出到result文件中
         print("周赛成绩 : ")
         print(contents_info[0])
         print("双周赛成绩 : ")

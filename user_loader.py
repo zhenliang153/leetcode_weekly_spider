@@ -11,7 +11,6 @@ class UserLoader(object):
     def getUser(self, file):
         users = []
         with open(file, 'r') as user_ids:
-            
             for user_id in user_ids:
                 user_id = user_id.strip()
                 if len(user_id) != 0 and user_id[0] != '#':

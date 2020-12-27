@@ -1,0 +1,7 @@
+# user列表，这里的user_id使用"user_slug"
+# 以大佬的名字为例
+# "username":"JOHNKRAM","user_slug":"johnkram","real_name":"汪乐平"
+# 这也是个性域名的ID
+# https://leetcode-cn.com/u/johnkram/
+
+johnkram
